@@ -98,7 +98,7 @@ while($flag) {
 			list($devicePath, $totalPathTime) = getPath($output[1], $output[0], $devicesData, array($output[1]), 0, $output[2]);
 
 			if(empty($devicePath) || count($devicePath) <= 1) {
-				echo "Output: Path Not Found"."\n";
+				echo "Output: Path not found"."\n";
 			} else {
 				printOutput(array_reverse($devicePath), $totalPathTime);
 			}
