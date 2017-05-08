@@ -8,7 +8,7 @@ unset($file_content[0]);
 
 foreach ($file_content as $key) {
 	$data = str_getcsv($key);
-	$devicesData[$data[0]][$data[1]] = $data[2];
+	$networkData[$data[0]][$data[1]] = $data[2];
 }
 
 function getChild($parent, $deviceData) {
@@ -76,6 +76,10 @@ function getPath($deviceStart, $deviceEnd, $deviceData, $path, $totalTime, $targ
 	}	
 }
 
+function printOutput($path, $time) {
+	print "Output: ".implode("=>", $path)."=>".$time."\n";
+}
+
 while($flag) {
 
 	print "Input: ";
@@ -106,17 +110,17 @@ while($flag) {
 		$traverseTime = $userInput[2];
 
 		//User Input Parameters Count
-		$UserInputParamsCount = count($userInput);
+		$userInputParamsCount = count($userInput);
 
 		//Check User Input is in acceptable format
-		if($UserInputParamsCount == 3) {
-			list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $devicesData, array($deviceFrom), 0, $traverseTime);
+		if($userInputParamsCount == 3) {
+			list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $networkData, array($deviceFrom), 0, $traverseTime);
 
 			if(count($devicePath) > 1) {
 				printOutput($devicePath, $totalPathTime);
 			}
 			else {
-				list($devicePath, $totalPathTime) = getPath($deviceTo, $deviceFrom, $devicesData, array($deviceTo), 0, $traverseTime);
+				list($devicePath, $totalPathTime) = getPath($deviceTo, $deviceFrom, $networkData, array($deviceTo), 0, $traverseTime);
 
 				if(empty($devicePath) || count($devicePath) <= 1) {
 					echo "Output: Path not found"."\n";
@@ -129,10 +133,5 @@ while($flag) {
 		}
 	}
 }
-
-function printOutput($path, $time) {
-	print "Output: ".implode("=>", $path)."=>".$time."\n";
-}
-
 
 ?>
