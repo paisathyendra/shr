@@ -88,14 +88,27 @@ while($flag) {
 
 	$output = explode(" ", $content);
 
-	if(count($output) == 3) {
-		list($devicePath, $totalPathTime) = getPath($output[0], $output[1], $devicesData, array($output[0]), 0, $output[2]);
+	//User Input - From Device
+	$deviceFrom = strtoupper($output[0]);
+
+	//User Input - To Device
+	$deviceTo = strtoupper($output[1]);
+
+	//User Input - Traverse Time
+	$traverseTime = $output[2];
+
+	//User Input Count
+	$inputCount = count($output);
+
+	//Check User Input is in acceptable format
+	if($inputCount == 3) {
+		list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $devicesData, array($deviceFrom), 0, $traverseTime);
 
 		if(count($devicePath) > 1) {
 			printOutput($devicePath, $totalPathTime);
 		}
 		else {
-			list($devicePath, $totalPathTime) = getPath($output[1], $output[0], $devicesData, array($output[1]), 0, $output[2]);
+			list($devicePath, $totalPathTime) = getPath($deviceTo, $deviceFrom, $devicesData, array($deviceTo), 0, $traverseTime);
 
 			if(empty($devicePath) || count($devicePath) <= 1) {
 				echo "Output: Path not found"."\n";
