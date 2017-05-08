@@ -2,11 +2,24 @@
 
 require_once("path.php");
 
-//Read content from CSV file
-$fileContent = explode("\n", file_get_contents($argv[1]));
+//Check file path is metioned to read
+if(isset($argv[1])) {
+
+	//Read content from CSV file
+	$fileContent = explode("\n", @file_get_contents($argv[1]));
+
+} else {
+	print "Please mention file path. Eg: php index.php \"network_path.csv\"". "\n";
+	exit;
+}
 
 //Remove CSV Header
 unset($fileContent[0]);
+
+if(count($fileContent) == 0) {
+	print "File is empty";
+	exit;
+}
 
 //Loop through CSV Content and form Network Path Data array
 foreach ($fileContent as $key => $value) {
