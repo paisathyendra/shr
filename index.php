@@ -57,18 +57,19 @@ while($readUserInput) {
 			//User Input - Traverse Time
 			$traverseTime = $userInput[2];
 
-			list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $networkData, array($deviceFrom), 0, $traverseTime);
+			//Fetch Network Path
+			list($networkPath, $totalPathTime) = fetchNetworkPath($deviceFrom, $deviceTo, $networkData, array($deviceFrom), 0, $traverseTime);
 
-			if(count($devicePath) > 1) {
-				printOutput($devicePath, $totalPathTime);
+			if(count($networkPath) > 1) {
+				printOutput($networkPath, $totalPathTime);
 			}
 			else {
-				list($devicePath, $totalPathTime) = getPath($deviceTo, $deviceFrom, $networkData, array($deviceTo), 0, $traverseTime);
+				list($networkPath, $totalPathTime) = fetchNetworkPath($deviceTo, $deviceFrom, $networkData, array($deviceTo), 0, $traverseTime);
 
-				if(empty($devicePath) || count($devicePath) <= 1) {
+				if(empty($networkPath) || count($networkPath) <= 1) {
 					echo "Output: Path not found"."\n";
 				} else {
-					printOutput(array_reverse($devicePath), $totalPathTime);
+					printOutput(array_reverse($networkPath), $totalPathTime);
 				}
 			}
 		} else {

@@ -4,63 +4,63 @@ function getChild($parent, $deviceData) {
 	return isset($deviceData[$parent]) ? $deviceData[$parent] : array();
 }
 
-function getPath($deviceStart, $deviceEnd, $deviceData, $path, $totalTime, $targetTime) {
-	$flag = true;
+function fetchNetworkPath($deviceStart, $deviceEnd, $deviceData, $path, $totalTime, $targetTime) {
+	$findPath = true;
 	$device = $deviceStart;
 	$target = $deviceEnd;
-	$sum = $totalTime;
+	$pathTime = $totalTime;
 
-	while($flag) {
+	while($findPath) {
 		$childData = getChild($device, $deviceData);
 		if(count($childData) == 0) {
 			break;
 		} else if(count($childData) == 1) {
 			foreach ($childData as $key => $value) {
 				if($key == $target) {
-					$sum = $sum + $value;
+					$pathTime = $pathTime + $value;
 					array_push($path, $key);
 
-					if($sum <= $targetTime) {
-						return array($path, $sum);
-						$flag = false;
+					if($pathTime <= $targetTime) {
+						return array($path, $pathTime);
+						$findPath = false;
 					} else {
 						return array("", "");
-						$flag = false;
+						$findPath = false;
 					}
 				} else {
 					$device = $key;
-					$sum = $sum + $value;
+					$pathTime = $pathTime + $value;
 					array_push($path, $key);
 				}
 			}
 		} else {
-			$deviceTime = $sum;
+			$deviceTime = $pathTime;
 			foreach ($childData as $key => $value) {
 				if($key == $target) {
-					$sum = $sum + $value;
+					$pathTime = $pathTime + $value;
 					array_push($path, $key);
 
-					if($sum <= $targetTime) {
-						return array($path, $sum);
-						$flag = false;
+					if($pathTime <= $targetTime) {
+						return array($path, $pathTime);
+						$findPath = false;
 					} else {
 						return array("", "");
-						$flag = false;
+						$findPath = false;
 					}
 				} else {
 					array_push($path, $key);
-					list($final_path, $final_time) = getPath($key, $target, $deviceData, $path, $deviceTime, $targetTime);
+					list($final_path, $final_time) = fetchNetworkPath($key, $target, $deviceData, $path, $deviceTime, $targetTime);
 					$deviceTime = $deviceTime + $value + $final_time;
 
 					if($deviceTime <= $targetTime && !empty($final_path)) {
 						return array($final_path, $deviceTime);
 					} else {
 						unset($path[array_search($key, $path)]);
-						$deviceTime = $sum;
+						$deviceTime = $pathTime;
 					}
 				}
 			}
-			$flag = false;
+			$findPath = false;
 		}
 	}	
 }
