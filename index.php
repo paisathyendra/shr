@@ -2,13 +2,18 @@
 
 $flag = true;
 
-$file_content = explode("\n", file_get_contents($argv[1]));
+//Read content from CSV file
+$fileContent = explode("\n", file_get_contents($argv[1]));
 
-unset($file_content[0]);
+//Remove CSV Header
+unset($fileContent[0]);
 
-foreach ($file_content as $key) {
-	$data = str_getcsv($key);
-	$networkData[$data[0]][$data[1]] = $data[2];
+//Loop through CSV Content and form Network Path Data array
+foreach ($fileContent as $key => $value) {
+	if(!empty(trim($value))) {
+		$data = str_getcsv($value);
+		$networkData[$data[0]][$data[1]] = $data[2];
+	}
 }
 
 function getChild($parent, $deviceData) {
@@ -100,20 +105,21 @@ while($flag) {
 		//Convert User Input String to Array
 		$userInput = explode(" ", $userInputString);
 
-		//User Input - From Device
-		$deviceFrom = strtoupper($userInput[0]);
-
-		//User Input - To Device
-		$deviceTo = strtoupper($userInput[1]);
-
-		//User Input - Traverse Time
-		$traverseTime = $userInput[2];
-
 		//User Input Parameters Count
 		$userInputParamsCount = count($userInput);
 
 		//Check User Input is in acceptable format
 		if($userInputParamsCount == 3) {
+			
+			//User Input - From Device
+			$deviceFrom = strtoupper($userInput[0]);
+
+			//User Input - To Device
+			$deviceTo = strtoupper($userInput[1]);
+
+			//User Input - Traverse Time
+			$traverseTime = $userInput[2];
+
 			list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $networkData, array($deviceFrom), 0, $traverseTime);
 
 			if(count($devicePath) > 1) {
