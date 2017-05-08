@@ -78,30 +78,33 @@ function getPath($deviceStart, $deviceEnd, $deviceData, $path, $totalTime, $targ
 
 while($flag) {
 
-	echo "Input: ";
+	print "Input: ";
 
-	$content = fgets(STDIN, 1024);
+	//Read User Input from Command Line
+	$userInputString = fgets(STDIN, 1024);
 
-	if(trim(strtolower($content)) === "quit") {
+	//User - Quit the application if user input is QUIT or quit
+	if(trim(strtolower($userInputString)) === "quit") {
 		break;
 	}
 
-	$output = explode(" ", $content);
+	//Convert User Input String to Array
+	$userInput = explode(" ", $userInputString);
 
 	//User Input - From Device
-	$deviceFrom = strtoupper($output[0]);
+	$deviceFrom = strtoupper($userInput[0]);
 
 	//User Input - To Device
-	$deviceTo = strtoupper($output[1]);
+	$deviceTo = strtoupper($userInput[1]);
 
 	//User Input - Traverse Time
-	$traverseTime = $output[2];
+	$traverseTime = $userInput[2];
 
-	//User Input Count
-	$inputCount = count($output);
+	//User Input Parameters Count
+	$UserInputParamsCount = count($userInput);
 
 	//Check User Input is in acceptable format
-	if($inputCount == 3) {
+	if($UserInputParamsCount == 3) {
 		list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $devicesData, array($deviceFrom), 0, $traverseTime);
 
 		if(count($devicePath) > 1) {
