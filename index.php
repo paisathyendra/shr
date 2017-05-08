@@ -80,47 +80,53 @@ while($flag) {
 
 	print "Input: ";
 
-	//Read User Input from Command Line
-	$userInputString = fgets(STDIN, 1024);
+	//Read User Input String from Command Line
+	$userInputString = trim(fgets(STDIN, 1024));
 
-	//User - Quit the application if user input is QUIT or quit
-	if(trim(strtolower($userInputString)) === "quit") {
-		break;
-	}
-
-	//Convert User Input String to Array
-	$userInput = explode(" ", $userInputString);
-
-	//User Input - From Device
-	$deviceFrom = strtoupper($userInput[0]);
-
-	//User Input - To Device
-	$deviceTo = strtoupper($userInput[1]);
-
-	//User Input - Traverse Time
-	$traverseTime = $userInput[2];
-
-	//User Input Parameters Count
-	$UserInputParamsCount = count($userInput);
-
-	//Check User Input is in acceptable format
-	if($UserInputParamsCount == 3) {
-		list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $devicesData, array($deviceFrom), 0, $traverseTime);
-
-		if(count($devicePath) > 1) {
-			printOutput($devicePath, $totalPathTime);
-		}
-		else {
-			list($devicePath, $totalPathTime) = getPath($deviceTo, $deviceFrom, $devicesData, array($deviceTo), 0, $traverseTime);
-
-			if(empty($devicePath) || count($devicePath) <= 1) {
-				echo "Output: Path not found"."\n";
-			} else {
-				printOutput(array_reverse($devicePath), $totalPathTime);
-			}
-		}
-	} else {
+	//Check if User Input String is blank
+	if(empty($userInputString)) {
 		print "Output: Invalid Format"."\n";
+	} else {
+
+		//User - Quit the application if user input is QUIT or quit
+		if(strtolower($userInputString) === "quit") {
+			break;
+		}
+
+		//Convert User Input String to Array
+		$userInput = explode(" ", $userInputString);
+
+		//User Input - From Device
+		$deviceFrom = strtoupper($userInput[0]);
+
+		//User Input - To Device
+		$deviceTo = strtoupper($userInput[1]);
+
+		//User Input - Traverse Time
+		$traverseTime = $userInput[2];
+
+		//User Input Parameters Count
+		$UserInputParamsCount = count($userInput);
+
+		//Check User Input is in acceptable format
+		if($UserInputParamsCount == 3) {
+			list($devicePath, $totalPathTime) = getPath($deviceFrom, $deviceTo, $devicesData, array($deviceFrom), 0, $traverseTime);
+
+			if(count($devicePath) > 1) {
+				printOutput($devicePath, $totalPathTime);
+			}
+			else {
+				list($devicePath, $totalPathTime) = getPath($deviceTo, $deviceFrom, $devicesData, array($deviceTo), 0, $traverseTime);
+
+				if(empty($devicePath) || count($devicePath) <= 1) {
+					echo "Output: Path not found"."\n";
+				} else {
+					printOutput(array_reverse($devicePath), $totalPathTime);
+				}
+			}
+		} else {
+			print "Output: Invalid Format"."\n";
+		}
 	}
 }
 
